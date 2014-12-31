@@ -21,13 +21,21 @@ alluvial(tit3d[,1:3], freq=tit3d$Freq, alpha=1, xw=0.2,
          layer = tit3d$Sex != "Female",
          border="white")
 
+
 # 4d
 alluvial( tit[,1:4], freq=tit$Freq, border=NA,
          hide = tit$Freq < quantile(tit$Freq, .50),
          col=ifelse( tit$Class == "3rd" & tit$Sex == "Male", "red", "gray") )
 
+# 3d example with custom ordering
+# Reorder "Sex" axis according to survival status
+ord <- list(NULL, with(tit3d, order(Sex, Survived)), NULL)
+alluvial(tit3d[,1:3], freq=tit3d$Freq, alpha=1, xw=0.2,
+         col=ifelse( tit3d$Survived == "No", "red", "gray"),
+         layer = tit3d$Sex != "Female",
+         border="white", ordering=ord)
 
-### POLPAN data
+### POLPAN data (soon)
 if(FALSE)
 {
 # POLPAN panel sample
