@@ -72,6 +72,7 @@ alluvial <- function( ..., freq, col="gray", border=0, layer, hide=FALSE, alpha=
   # Calculate stripe locations on dimensions: list of data frames. A component
   # for a dimension. Data frame contains 'y' locations of stripes.
   dd <- lapply(seq_along(d), getp, d=d, f=p$freq)
+  rval <- list( endpoints=dd )
   # Plotting
   op <- par(mar=c(2, 1, 1, 1))
   plot(NULL, type="n", xlim=c(1-cw, np+cw), ylim=c(0, 1), xaxt="n", yaxt="n",
@@ -106,5 +107,6 @@ alluvial <- function( ..., freq, col="gray", border=0, layer, hide=FALSE, alpha=
        line=0.5, col="white", col.ticks="black", labels=FALSE)
   axis(1, at=seq_along(d), tick=FALSE, labels=names(d))
   par(op)
+  return(rval)
 }
 
