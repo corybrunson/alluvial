@@ -22,7 +22,7 @@
 #' @example examples/alluvial.R
 
 alluvial <- function( ..., freq, col="gray", border=0, layer, hide=FALSE, alpha=0.5,
-                     gap.width=0.05, xw=0.1, cw=0.1 )
+                     gap.width=0.05, xw=0.1, cw=0.1, sinecurve=FALSE )
 {
   # Data and graphical parameters
   p <- data.frame( ..., freq=freq, col, alpha, border, hide, stringsAsFactors=FALSE)
@@ -84,11 +84,15 @@ alluvial <- function( ..., freq, col="gray", border=0, layer, hide=FALSE, alpha=
     for(j in 1:(np-1) )
     {
       # Draw stripe
-      xspline( c(j, j, j+xw, j+1-xw, j+1, j+1, j+1-xw, j+xw, j) + rep(c(cw, -cw, cw), c(3, 4, 2)),
-             c( dd[[j]][i, c(1, 2, 2)], rev(dd[[j+1]][i, c(1, 1, 2, 2)]), dd[[j]][i,c(1, 1)]), 
-             shape = c(0,0,1,1,0,0,1,1,0, 0),
-             open=FALSE,
-             col=p$col[i], border=p$border[i])
+      if(sinecurve) {
+        riverplot::curveseg(j+cw, j+1-cw, dd[[j]][i], dd[[j+1]] )
+      } else {
+        xspline( c(j, j, j+xw, j+1-xw, j+1, j+1, j+1-xw, j+xw, j) + rep(c(cw, -cw, cw), c(3, 4, 2)),
+                 c( dd[[j]][i, c(1, 2, 2)], rev(dd[[j+1]][i, c(1, 1, 2, 2)]), dd[[j]][i,c(1, 1)]), 
+                 shape = c(0,0,1,1,0,0,1,1,0, 0),
+                 open=FALSE,
+                 col=p$col[i], border=p$border[i])
+      }
     }
   }
   # Category blocks with labels
