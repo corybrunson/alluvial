@@ -85,7 +85,9 @@ alluvial <- function( ..., freq, col="gray", border=0, layer, hide=FALSE, alpha=
     {
       # Draw stripe
       if(sinecurve) {
-        riverplot::curveseg(j+cw, j+1-cw, dd[[j]][i], dd[[j+1]] )
+        riverplot::curveseg(j+cw, j+1-cw, dd[[j]][i,1], dd[[j+1]][i,1],
+                            width = dd[[j]][i,2] - dd[[j]][i,1],
+                            col=p$col[i] )
       } else {
         xspline( c(j, j, j+xw, j+1-xw, j+1, j+1, j+1-xw, j+xw, j) + rep(c(cw, -cw, cw), c(3, 4, 2)),
                  c( dd[[j]][i, c(1, 2, 2)], rev(dd[[j+1]][i, c(1, 1, 2, 2)]), dd[[j]][i,c(1, 1)]), 
