@@ -1,9 +1,9 @@
 #' Alluvial diagram
-#'
+#' 
 #' Drawing alluvial diagrams also known as parallel set plots.
-#'
+#' 
 #' Still under development!
-#'
+#' 
 #' @param ... vectors or data frames, all for the same number of observations
 #' @param freq numeric, vector of frequencies of the same length as the number of observations
 #' @param col vector of colors of the stripes
@@ -14,19 +14,26 @@
 #' @param gap.width numeric, relative width of inter-category gaps
 #' @param xw numeric, the distance from the set axis to the control points of the xspline
 #' @param cw numeric, width of the category axis
-#'
+#' @param rank.axes character, name of desired pillar ranking function (current options are "rightward", "leftward", and "zzout")
+#'   
 #' @return Nothing
-#'
+#'   
 #' @export
-#'
+#' 
 #' @example examples/alluvial.R
 
 alluvial <- function( ..., freq, col="gray", border=0, layer, hide=FALSE, alpha=0.5,
-                     gap.width=0.05, xw=0.1, cw=0.1, ordering=NULL)
+                     gap.width=0.05, xw=0.1, cw=0.1, rank.axes="rightward", ordering=NULL)
 {
   # Data and graphical parameters
   p <- data.frame( ..., freq=freq, col, alpha, border, hide, stringsAsFactors=FALSE)
   np <- ncol(p) - 5                    # Number of dimensions
+  # select ranking function
+  rank.fun <- list(
+    rightward = function(n, i) c(i, (1:n)[-i]),
+    leftward = function(n, i) c(i, (n:1)[-(n+1-i)]),
+    zzout = zzout
+  )[[rank.axes]]
   # check if 'ordering' is of proper form
   if( !is.null(ordering) )
   {
@@ -61,7 +68,7 @@ alluvial <- function( ..., freq, col="gray", border=0, layer, hide=FALSE, alpha=
   # w = gap between categories
   getp <- function(i, d, f, w=gap.width) {
     # Ordering dimension ids for lexicographic sorting
-    a <- c(i, (1:ncol(d))[-i])
+    a <- if( is.null(rank.fun) ) 1:ncol(d) else rank.fun(n = ncol(d), i = i)
     # Order of rows of d starting from i-th dimension
     if( is.null(ordering[[i]]) )
     {

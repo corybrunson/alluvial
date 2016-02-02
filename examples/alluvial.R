@@ -35,6 +35,19 @@ alluvial(tit3d[,1:3], freq=tit3d$Freq, alpha=1, xw=0.2,
          layer = tit3d$Sex != "Female",
          border="white", ordering=ord)
 
+# 4d example with different pillar rankings and w/wout custom ordering
+# (Reorders the "Survived" axis according to "Age" only; poor practice, maybe)
+ord <- list(NULL, with(tit, order(Sex, Survived)),
+            NULL, with(tit, order(Age)))
+alluvial( tit[,1:4], freq=tit$Freq, border=NA,
+          rank.axes="rightward" )
+alluvial( tit[,1:4], freq=tit$Freq, border=NA,
+          rank.axes="rightward", ordering=ord )
+alluvial( tit[,1:4], freq=tit$Freq, border=NA,
+          rank.axes="zzout" )
+alluvial( tit[,1:4], freq=tit$Freq, border=NA,
+          rank.axes="zzout", ordering=ord )
+
 ### POLPAN data (soon)
 if(FALSE)
 {
