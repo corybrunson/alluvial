@@ -21,11 +21,32 @@ alluvial(tit3d[,1:3], freq=tit3d$Freq, alpha=1, xw=0.2,
          layer = tit3d$Sex != "Female",
          border="white")
 
+# 3d example with custom ordering
+# Reorder "Sex" axis according to survival status
+ord <- list(NULL, with(tit3d, order(Sex, Survived)), NULL)
+alluvial(tit3d[,1:3], freq=tit3d$Freq, alpha=1, xw=0.2,
+         col=ifelse( tit3d$Survived == "No", "red", "gray"),
+         layer = tit3d$Sex != "Female",
+         border="white", ordering=ord)
+
+
 # 4d
 alluvial( tit[,1:4], freq=tit$Freq, border=NA,
          hide = tit$Freq < quantile(tit$Freq, .50),
          col=ifelse( tit$Class == "3rd" & tit$Sex == "Male", "red", "gray") )
 
+# 4d example with different axis rankings and w/wout custom ordering
+# (Reorders the "Survived" axis according to "Age" only; poor practice, maybe)
+ord <- list(NULL, with(tit, order(Sex, Survived)),
+            NULL, with(tit, order(Age)))
+alluvial( tit[,1:4], freq=tit$Freq, border=NA,
+          ranking="rightward" )
+alluvial( tit[,1:4], freq=tit$Freq, border=NA,
+          ranking="rightward", ordering=ord )
+alluvial( tit[,1:4], freq=tit$Freq, border=NA,
+          ranking="zzout" )
+alluvial( tit[,1:4], freq=tit$Freq, border=NA,
+          ranking="zzout", ordering=ord )
 
 # Possible blocks options
 for (blocks in c(TRUE, FALSE, "bookends")) {
@@ -34,7 +55,7 @@ for (blocks in c(TRUE, FALSE, "bookends")) {
     alluvial( tit[, 1:4], freq = tit$Freq, border = NA,
               hide = tit$Freq < quantile(tit$Freq, .50),
               col = ifelse( tit$Class == "3rd" & tit$Sex == "Male",
-                            "red", "gray" ),
+                            "red", "gray" ), alpha = .5,
               blocks = blocks )
 }
 
