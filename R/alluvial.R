@@ -11,7 +11,7 @@
 #'   (must have compatible numbers of rows).
 #' @param freq numeric vector of frequencies, having the same length as the 
 #'   combined data frame.
-#' @param col character vector of colors of ribbon colors.
+#' @param col character vector of ribbon colors.
 #' @param alpha numeric vector of ribbon transparencies; ignored if \code{NULL}.
 #' @param border character vector of ribbon border colors.
 #' @param hide logical vector indicating which ribbons to hide.
@@ -41,7 +41,6 @@ alluvial <- function(..., freq,
     
     # Dataset (combined alone, so that other inputs don't lengthen it)
     p <- data.frame(..., stringsAsFactors = FALSE)
-    np <- length(p)
     # Convert any character fields to factors
     is.ch <- sapply(p, is.character)
     p[is.ch] <- lapply(p[is.ch], as.factor)
@@ -66,7 +65,9 @@ alluvial <- function(..., freq,
         p$freq = freq
     }
     p$freq <- with(p, freq / sum(freq))
-
+    wp <- which(names(p) != "freq")
+    np <- length(p) - 1
+    
     # Convert blocks to vector
     if (length(blocks) == 1) {
         blocks <- if (!is.na(as.logical(blocks))) {
@@ -95,8 +96,8 @@ alluvial <- function(..., freq,
     }
 
     # List of data frames of vertical positions of stripe corners
-    dd <- lapply(1:np, function(i) {
-        flowpoints(i = i, dat = p[, 1:np], freq = p$freq, wid = gap.width,
+    dd <- lapply(wp, function(i) {
+        flowpoints(i = i, dat = p[, wp], freq = p$freq, wid = gap.width,
                    ord = ordering[[i]])
     })
 
